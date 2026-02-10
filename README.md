@@ -1,158 +1,73 @@
-# 📚 Formulario de Semiótica - Aula y Pasillo Piso 12
+# React + TypeScript + Vite
 
-Formulario interactivo para la tarea escrita de semiótica: "Aula y pasillo del piso 12 como realidad-signo en sismo".
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## 🌐 Demo en línea
+Currently, two official plugins are available:
 
-**URL:** https://p2hrkshcbt6r6.ok.kimi.link
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## ✨ Características
+## React Compiler
 
-- ✅ **7 pasos** de navegación con barra de progreso
-- ✅ **Campos de correo** (principal + copia CC)
-- ✅ **Transcripción de voz** (Web Speech API)
-- ✅ **Preguntas de opción múltiple** (5 preguntas)
-- ✅ **Validación** de campos obligatorios
-- ✅ **Diseño responsive** (móvil y desktop)
-- ✅ **ESLint + TypeScript** configurados
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## 📁 Estructura del proyecto
+## Expanding the ESLint configuration
 
-```
-formulario-semiotica/
-├── index.html                 # Formulario principal (HTML + CSS + JS)
-├── eslint.config.js           # Configuración de ESLint
-├── package.json               # Dependencias
-├── tsconfig.json              # Configuración de TypeScript
-├── tsconfig.app.json          # Configuración de TypeScript (app)
-├── tsconfig.node.json         # Configuración de TypeScript (node)
-├── README.md                  # Este archivo
-└── src/
-    ├── hooks/
-    │   └── useSpeechRecognition.ts   # Hook de reconocimiento de voz
-    ├── types/
-    │   └── form.types.ts             # Tipos de TypeScript
-    └── utils/
-        └── formUtils.ts              # Utilidades del formulario
-```
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-## 🚀 Instalación
-
-```bash
-# Clonar o descargar el proyecto
-cd formulario-semiotica
-
-# Instalar dependencias
-npm install
-
-# Ejecutar linter
-npm run lint
-
-# Verificar tipos
-npm run type-check
-```
-
-## 📝 Contenido del formulario
-
-### Parte 1: Descripción del escenario
-- Aula de referencia
-- Descripción del interior
-- Descripción del pasillo
-
-### Parte 2.1: Signos visibles (6 signos)
-- Clasificación: verbal, visual, espacial
-
-### Parte 2.2: Signos "escondidos"
-- 4 signos corporales (comportamientos)
-- 4 signos espaciales (rasgos del espacio)
-
-### Parte 3: Análisis semiótico
-- 3 signos corporales con semántica, sintáctica y pragmática
-- 3 signos espaciales con semántica, sintáctica y pragmática
-
-### Parte 4: Aula como "texto" de signos
-- Párrafo reflexivo sobre realidad-signo
-
-### Parte 5: Responsabilidad profesional
-- Conexión con comunicación y diseño
-
-### Preguntas de opción múltiple (5)
-- Evaluación de comprensión de conceptos semióticos
-
-## 🎤 Reconocimiento de voz
-
-El formulario incluye botones de micrófono (🎤) en cada campo de texto que permiten:
-
-- Dictar respuestas en español
-- Transcripción en tiempo real
-- Indicador visual de grabación
-
-**Requisitos:** Navegador Chrome o Edge
-
-## 🔧 Configuración de ESLint
-
-```javascript
-// eslint.config.js
+```js
 export default defineConfig([
   globalIgnores(['dist']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
       tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
       tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
       tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
     ],
     languageOptions: {
       parserOptions: {
         project: ['./tsconfig.node.json', './tsconfig.app.json'],
         tsconfigRootDir: import.meta.dirname,
       },
+      // other options...
     },
   },
-]);
+])
 ```
 
-## 📧 Envío de correos
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-El formulario está preparado para enviar correos. Opciones:
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-### Opción 1: EmailJS (recomendado)
-```javascript
-import emailjs from '@emailjs/browser';
-
-await emailjs.send(
-  'YOUR_SERVICE_ID',
-  'YOUR_TEMPLATE_ID',
-  templateParams,
-  'YOUR_PUBLIC_KEY'
-);
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-
-### Opción 2: Backend propio
-```javascript
-fetch('/api/send-email', {
-  method: 'POST',
-  body: JSON.stringify(data)
-});
-```
-
-### Opción 3: mailto:
-```javascript
-window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-```
-
-## 🛠️ Tecnologías
-
-- HTML5
-- CSS3
-- TypeScript
-- ESLint 9
-- Web Speech API
-
-## 📄 Licencia
-
-MIT
-
----
-
-**Nota:** Este formulario fue creado como parte de la tarea de semiótica para la sesión 1 del curso de Comunicación y Diseño.
